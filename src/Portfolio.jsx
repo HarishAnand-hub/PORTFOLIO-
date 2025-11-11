@@ -168,14 +168,14 @@ const Portfolio = () => {
               </motion.a>
               
               <motion.a
-                href="https://drive.google.com/file/d/your-resume-id/view"
+                href="https://drive.google.com/uc?export=download&id=1rFuNqo-OMrq_Q8rbGYi4zAUv_A6Hxn1O"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.05, boxShadow: '0 0 20px rgba(168, 85, 247, 0.6)' }}
                 whileTap={{ scale: 0.95 }}
                 className="px-8 py-3 bg-gradient-to-r from-purple-500 to-pink-600 rounded-full font-semibold flex items-center gap-2 hover:from-purple-600 hover:to-pink-700 transition-all"
               >
-                <Download size={20} /> Download Résumé
+                <Download size={20} /> Download Resume
               </motion.a>
             </motion.div>
 
@@ -195,7 +195,7 @@ const Portfolio = () => {
                 <Linkedin size={32} />
               </motion.a>
               <motion.a
-                href="https://github.com/harishanand"
+                href="https://github.com/HarishAnand-hub"
                 target="_blank"
                 rel="noopener noreferrer"
                 whileHover={{ scale: 1.2, rotate: -5 }}
@@ -298,21 +298,21 @@ const Portfolio = () => {
         title: '🤖 Autonomous Tic-Tac-Toe Robot with AI',
         description: 'Integrated computer vision + Minimax AI + Dobot for real-time gameplay. Achieved 98.5% detection accuracy with multi-method image processing. Deployed undefeated system using alpha–beta pruned Minimax.',
         tech: ['Python', 'OpenCV', 'AI', 'Dobot', 'Computer Vision'],
-        github: 'https://github.com/harishanand',
+        github: 'https://github.com/HarishAnand-hub',
         gradient: 'from-cyan-500 to-blue-600'
       },
       {
         title: '🏗️ Vision-Guided Robotic Palletization',
         description: 'End-to-end YOLOv8 + motion planning pipeline for object sorting. Achieved sub-2mm precision and 100% classification accuracy with real-time robotic manipulation.',
         tech: ['YOLOv8', 'ROS', 'Python', 'Motion Planning'],
-        github: 'https://github.com/harishanand',
+        github: 'https://github.com/HarishAnand-hub',
         gradient: 'from-purple-500 to-pink-600'
       },
       {
         title: '💓 Deep Learning for Heart Attack Prediction',
         description: 'Hybrid Xception + ResNet50 model for ECG-based diagnosis achieving 94.2% accuracy. Published at IEEE ICCCT 2025.',
         tech: ['TensorFlow', 'Keras', 'Deep Learning', 'Medical AI'],
-        github: 'https://github.com/harishanand',
+        github: 'https://github.com/HarishAnand-hub',
         paper: 'https://doi.org/10.1109/example',
         gradient: 'from-pink-500 to-red-600'
       },
@@ -320,7 +320,7 @@ const Portfolio = () => {
         title: '⚽ Real-Time Football Detection & Tracking',
         description: 'YOLOv8-based custom object tracker achieving 87% mAP at 30 FPS. Optimized for real-time sports analytics with robust tracking under occlusions.',
         tech: ['YOLOv8', 'PyTorch', 'Computer Vision', 'Real-time Processing'],
-        github: 'https://github.com/harishanand',
+        github: 'https://github.com/HarishAnand-hub',
         gradient: 'from-green-500 to-emerald-600'
       }
     ];
@@ -562,13 +562,42 @@ const Portfolio = () => {
     );
   };
 
-  // Contact Section
+  // Contact Section with Web3Forms
   const Contact = () => {
     const [formData, setFormData] = useState({ name: '', email: '', message: '' });
+    const [status, setStatus] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
       e.preventDefault();
-      window.location.href = `mailto:harishanand077@gmail.com?subject=Portfolio Contact from ${formData.name}&body=${formData.message}`;
+      setStatus('sending');
+
+      try {
+        const response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            access_key: '0de9615d-7648-47a3-8832-02a719d1308c',
+            name: formData.name,
+            email: formData.email,
+            message: formData.message,
+            subject: `Portfolio Contact from ${formData.name}`,
+          }),
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+          setStatus('success');
+          setFormData({ name: '', email: '', message: '' });
+          setTimeout(() => setStatus(''), 5000);
+        } else {
+          setStatus('error');
+        }
+      } catch (error) {
+        setStatus('error');
+      }
     };
 
     return (
@@ -626,13 +655,26 @@ const Portfolio = () => {
                 />
               </div>
 
+              {status === 'success' && (
+                <div className="p-4 bg-green-500/20 border border-green-500 rounded-lg text-green-400">
+                  ✓ Message sent successfully! I'll get back to you soon.
+                </div>
+              )}
+
+              {status === 'error' && (
+                <div className="p-4 bg-red-500/20 border border-red-500 rounded-lg text-red-400">
+                  ✗ Something went wrong. Please try again or email me directly.
+                </div>
+              )}
+
               <motion.button
                 type="submit"
-                whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(34, 211, 238, 0.6)' }}
+                disabled={status === 'sending'}
+                whileHover={{ scale: status === 'sending' ? 1 : 1.05, boxShadow: '0 0 30px rgba(34, 211, 238, 0.6)' }}
                 whileTap={{ scale: 0.95 }}
-                className="w-full py-4 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-lg font-semibold text-white hover:from-cyan-600 hover:to-purple-700 transition-all"
+                className="w-full py-4 bg-gradient-to-r from-cyan-500 to-purple-600 rounded-lg font-semibold text-white hover:from-cyan-600 hover:to-purple-700 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                Send Message
+                {status === 'sending' ? 'Sending...' : 'Send Message'}
               </motion.button>
             </form>
 
@@ -647,7 +689,7 @@ const Portfolio = () => {
 
                 <div className="flex gap-6">
                   <motion.a
-                    href="https://linkedin.com/in/harish-anand-123456789"
+                    href="https://linkedin.com/in/harish-anand-069762391"
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.2, rotate: 5 }}
@@ -656,7 +698,7 @@ const Portfolio = () => {
                     <Linkedin size={28} />
                   </motion.a>
                   <motion.a
-                    href="https://github.com/harishanand"
+                    href="https://github.com/HarishAnand-hub"
                     target="_blank"
                     rel="noopener noreferrer"
                     whileHover={{ scale: 1.2, rotate: -5 }}
