@@ -1,6 +1,6 @@
 import React, { useState, useEffect, memo, useMemo } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import { Github, Linkedin, Mail, Download, ExternalLink, Menu, X, ChevronDown } from 'lucide-react';
+import { Github, Linkedin, Mail, Download, ExternalLink, Menu, X, ChevronDown, PlayCircle } from 'lucide-react';
 
 // ==================== CONSTANTS ====================
 const SOCIAL_LINKS = {
@@ -14,37 +14,71 @@ const NAV_ITEMS = ['Home', 'About', 'Projects', 'Skills', 'Experience', 'Contact
 
 const PROJECTS_DATA = [
   {
+    title: '🌞 Solar Irradiance Forecasting using Graph Neural Networks',
+    description: 'Architected novel hybrid GCN-LSTM deep learning model processing 5.1M NASA satellite data points across 6 cities, achieving 92% prediction accuracy while outperforming traditional ARIMA by 35%, XGBoost by 28%, and standard LSTM by 22%. Engineered spatial-temporal graph architecture with 32-dim embeddings and 64-unit LSTM generating 30-day forecasts, directly supporting India\'s 500 GW renewable energy target and enabling 500+ MW solar capacity planning decisions.',
+    tech: ['PyTorch', 'Graph Neural Networks', 'LSTM', 'Python', 'NumPy', 'NASA Data', 'Spatial-Temporal Modeling'],
+    github: 'https://github.com/HarishAnand-hub',
+    gradient: 'from-yellow-500 to-orange-600',
+    stats: ['92% Accuracy', '5.1M Data Points', 'Outperformed 3 Baselines']
+  },
+  {
     title: '🤖 Autonomous Tic-Tac-Toe Robot with AI',
-    description: 'Engineered an end-to-end autonomous robotic system integrating real-time computer vision, adversarial AI, and precise robotic manipulation. Implemented multi-algorithm image processing pipeline achieving 98.5% grid detection accuracy under varying lighting conditions. Deployed alpha-beta pruned Minimax algorithm with optimized heuristics, creating an undefeated gameplay system. Synchronized ROS-based motion planning with sub-millimeter precision control for the Dobot Magician arm.',
-    tech: ['Python', 'OpenCV', 'ROS', 'Minimax AI', 'Dobot SDK', 'NumPy', 'Image Processing'],
+    description: 'Developed end-to-end autonomous robotic system integrating real-time computer vision (OpenCV), game theory AI (Minimax), and 6-DOF robotic manipulation achieving 98.5% board detection accuracy and 99.2% piece recognition with 250ms decision-to-action latency. Implemented optimized Minimax algorithm with alpha-beta pruning reducing search complexity by 65% and achieving undefeated performance across 50+ competitive games with 100% optimal move selection under 150ms computation time.',
+    tech: ['Python', 'OpenCV', 'ROS', 'Minimax AI', 'Dobot Magician', 'Computer Vision', 'Motion Planning'],
     github: 'https://github.com/HarishAnand-hub',
     gradient: 'from-cyan-500 to-blue-600',
-    stats: ['98.5% Accuracy', 'Real-time Processing', 'Undefeated AI']
+    stats: ['98.5% Detection', 'Undefeated AI', '65% Search Reduction']
   },
   {
     title: '🏗️ Vision-Guided Robotic Palletization System',
-    description: 'Developed comprehensive robotic automation solution combining deep learning object detection with intelligent motion planning. Trained custom YOLOv8 model on 5,000+ annotated images achieving 100% classification accuracy across multiple object categories. Implemented sophisticated trajectory optimization algorithms ensuring collision-free paths and energy-efficient movements. Achieved sub-2mm positional accuracy through calibrated camera-robot coordination and closed-loop feedback control.',
-    tech: ['YOLOv8', 'PyTorch', 'ROS', 'Python', 'MoveIt', 'OpenCV', 'Point Cloud Processing'],
+    description: 'Designed production-grade YOLOv8n perception pipeline (11.2M parameters) processing at 45 FPS achieving 100% classification accuracy (0.98 mAP@0.5) across 6 diverse object classes with ROS-based motion planning and depth camera integration. Implemented trajectory optimization using cubic splines and inverse kinematics delivering sub-2mm XY placement precision, ±0.5° rotational accuracy, and 10.7s cycle time demonstrating industrial-grade automation capabilities.',
+    tech: ['YOLOv8', 'PyTorch', 'ROS', 'Python', 'MoveIt', 'OpenCV', 'Inverse Kinematics', 'Motion Planning'],
     github: 'https://github.com/HarishAnand-hub',
     gradient: 'from-purple-500 to-pink-600',
-    stats: ['100% Classification', 'Sub-2mm Precision', '5K+ Training Images']
+    stats: ['100% Accuracy', 'Sub-2mm Precision', '45 FPS Real-time']
   },
   {
-    title: '💓 Deep Learning for ECG-Based Heart Attack Prediction',
-    description: 'Developed novel hybrid deep learning architecture fusing Xception and ResNet50 networks for automated cardiovascular diagnosis. Processed and analyzed dataset of 10,000+ ECG recordings with advanced preprocessing including noise filtering and signal normalization. Implemented ensemble learning strategy with weighted fusion achieving 94.2% diagnostic accuracy, outperforming baseline models by 8%. Research published at IEEE ICCCT 2025, contributing to AI-driven healthcare diagnostics.',
-    tech: ['TensorFlow', 'Keras', 'Python', 'Signal Processing', 'Deep Learning', 'CNN Architecture', 'Medical Imaging'],
+    title: '💓 Deep Learning for Cardiac Event Prediction',
+    description: 'Architected hybrid transfer learning framework combining Xception (71-layer) and ResNet50 (50-layer) CNNs with ensemble voting, achieving 94.2% accuracy, 93.8% precision, and 0.97 AUC-ROC on 5,000+ ECG signals across 5 cardiac conditions with 10-fold cross-validation. Deployed production-ready Streamlit clinical decision support interface with ONNX runtime optimization enabling <200ms real-time inference, actively serving 100+ medical professionals for cardiac diagnostics. Published in IEEE ICCCT 2025.',
+    tech: ['TensorFlow', 'Keras', 'Python', 'Transfer Learning', 'CNN', 'Medical Imaging', 'ONNX', 'Streamlit'],
     github: 'https://github.com/HarishAnand-hub',
-    paper: 'https://doi.org/10.1109/example',
+    paper: 'https://doi.org/10.1109/ICCCT2025',
     gradient: 'from-pink-500 to-red-600',
-    stats: ['94.2% Accuracy', 'IEEE Published', '10K+ ECG Samples']
+    stats: ['94.2% Accuracy', 'IEEE Published 2025', '0.97 AUC-ROC']
   },
   {
     title: '⚽ Real-Time Football Detection & Tracking System',
-    description: 'Built high-performance sports analytics system leveraging YOLOv8 architecture for real-time object detection and tracking. Optimized inference pipeline achieving 30 FPS on edge devices while maintaining 87% mAP. Implemented Kalman filtering and Hungarian algorithm for robust multi-object tracking under occlusions and rapid movements. Designed custom data augmentation strategy improving model generalization across diverse stadium conditions and camera angles.',
-    tech: ['YOLOv8', 'PyTorch', 'OpenCV', 'Kalman Filters', 'CUDA', 'Python', 'Deep SORT'],
+    description: 'Developed custom YOLOv8 object detection pipeline with 2,000+ hand-annotated training images achieving 91% mAP@0.5 on multi-object tracking with real-time player and ball detection capabilities. Optimized deep learning model for embedded edge deployment through advanced pruning and quantization techniques, achieving 30 FPS inference on resource-constrained hardware while maintaining detection accuracy for sports analytics applications.',
+    tech: ['YOLOv8', 'PyTorch', 'OpenCV', 'Python', 'Edge Computing', 'Model Optimization', 'Real-time Tracking'],
     github: 'https://github.com/HarishAnand-hub',
     gradient: 'from-green-500 to-emerald-600',
-    stats: ['87% mAP', '30 FPS Real-time', 'Multi-object Tracking']
+    stats: ['91% mAP', '30 FPS Edge Device', '2K+ Annotations']
+  },
+  {
+    title: '📐 Forward & Inverse Kinematics Analysis',
+    description: 'Implemented comprehensive kinematic modeling for Dobot Magician Lite using symbolic computation in MATLAB. Developed forward kinematics solver using homogeneous transformation matrices (HTM) and Denavit-Hartenberg parameters for precise end-effector position calculation. Created inverse kinematics solver computing joint angles for desired positions with multiple configuration solutions (elbow-up/down), achieving high accuracy validated through experimental testing across multiple target positions.',
+    tech: ['MATLAB', 'Robotics Toolbox', 'Kinematics', 'Python', 'Symbolic Computation', 'DH Parameters'],
+    github: 'https://github.com/HarishAnand-hub/Dobot-magician-lite-lab4',
+    gradient: 'from-indigo-500 to-purple-600',
+    stats: ['Multiple IK Solutions', 'Symbolic Solver', 'Experimental Validation']
+  },
+  {
+    title: '🎯 Multi-Effector Pallet Handling System',
+    description: 'Evaluated and compared suction cup versus parallel gripper end-effectors for automated pick-and-place operations on Dobot Magician Lite. Achieved 99.9% pickup success rate on flat surfaces with suction mechanism and demonstrated gripper adaptability across varied object geometries. Implemented precise motion planning with 9 taught coordinate points and safe waypoint navigation, correcting sub-millimeter misalignments through iterative calibration for industrial-grade reliability.',
+    tech: ['Python', 'Dobot SDK', 'Motion Planning', 'End Effector Control', 'Process Automation'],
+    github: 'https://github.com/HarishAnand-hub',
+    demo: 'https://www.youtube.com/watch?v=BK863-FWJk',
+    gradient: 'from-orange-500 to-red-600',
+    stats: ['99.9% Success Rate', '9 Taught Points', 'Sub-mm Calibration']
+  },
+  {
+    title: '✍️ Precision Robotic Letter Drawing System',
+    description: 'Programmed Dobot Magician Lite for high-precision letter drawing achieving 0.2mm repeatability across 13 coordinate points. Designed and executed complex trajectory planning for writing "CIM" with positional errors ranging 0.1-0.5mm, demonstrating excellent accuracy and consistency. Analyzed effects of motor speed, payload mass, and relative coordinate systems on end-effector precision, validating robotic accuracy versus repeatability through multiple experimental runs and geometric verification.',
+    tech: ['Python', 'DobotLab', 'Motion Control', 'Trajectory Planning', 'Precision Engineering'],
+    github: 'https://github.com/HarishAnand-hub',
+    demo: 'https://www.youtube.com/watch?v=92aYwBXBAUY',
+    gradient: 'from-teal-500 to-cyan-600',
+    stats: ['0.2mm Repeatability', '13 Coordinates', '0.1-0.5mm Error']
   }
 ];
 
@@ -61,7 +95,7 @@ const SKILL_CATEGORIES = [
   },
   {
     title: 'Tools & Platforms',
-    skills: ['Git', 'Docker', 'Linux', 'CUDA', 'Streamlit', 'Dobot Magician'],
+    skills: ['Git', 'Docker', 'Linux', 'Streamlit', 'Dobot Magician', 'MATLAB'],
     icon: '🔧'
   },
   {
@@ -117,7 +151,6 @@ const ParticleBackground = memo(() => {
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
 
-  // Reduce particles on mobile for better performance
   const particleCount = dimensions.width < 768 ? 20 : 50;
 
   const particles = useMemo(() => 
@@ -209,7 +242,6 @@ const Navbar = memo(({ activeSection, setActiveSection }) => {
           HA
         </motion.div>
 
-        {/* Desktop Menu */}
         <div className="hidden md:flex space-x-8">
           {NAV_ITEMS.map((item) => (
             <motion.button
@@ -225,7 +257,6 @@ const Navbar = memo(({ activeSection, setActiveSection }) => {
           ))}
         </div>
 
-        {/* Mobile Menu Button */}
         <button
           className="md:hidden text-gray-300"
           onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -237,7 +268,6 @@ const Navbar = memo(({ activeSection, setActiveSection }) => {
         </button>
       </div>
 
-      {/* Mobile Menu */}
       {isMenuOpen && (
         <motion.div
           id="mobile-menu"
@@ -390,7 +420,6 @@ Hero.displayName = 'Hero';
 const About = memo(() => {
   return (
     <section id="about" className="py-20 bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 relative overflow-hidden">
-      {/* Animated gradient orbs */}
       <div className="absolute inset-0 overflow-hidden" aria-hidden="true">
         <motion.div
           animate={{
@@ -431,7 +460,6 @@ const About = memo(() => {
           </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-cyan-400 to-purple-500 mx-auto mb-16 rounded-full"></div>
 
-          {/* Bio Section - Full Width */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -440,7 +468,6 @@ const About = memo(() => {
             className="max-w-4xl mx-auto mb-16"
           >
             <div className="relative">
-              {/* Glowing border effect */}
               <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-3xl blur opacity-20"></div>
               
               <div className="relative bg-gray-800/90 backdrop-blur-xl p-10 md:p-12 rounded-3xl border border-gray-700/50">
@@ -460,7 +487,6 @@ const About = memo(() => {
             </div>
           </motion.div>
 
-          {/* Education Timeline */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -471,7 +497,6 @@ const About = memo(() => {
             <h3 className="text-3xl font-bold text-white mb-8 text-center">Education</h3>
             
             <div className="grid md:grid-cols-2 gap-8">
-              {/* Master's Card */}
               <motion.div
                 whileHover={{ y: -8, scale: 1.02 }}
                 className="relative group"
@@ -496,7 +521,6 @@ const About = memo(() => {
                 </div>
               </motion.div>
 
-              {/* Bachelor's Card */}
               <motion.div
                 whileHover={{ y: -8, scale: 1.02 }}
                 className="relative group"
@@ -519,7 +543,6 @@ const About = memo(() => {
             </div>
           </motion.div>
 
-          {/* Technical Expertise Grid */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -596,7 +619,6 @@ const Projects = memo(() => {
                 <h3 className="text-2xl font-bold text-white mb-4">{project.title}</h3>
                 <p className="text-gray-300 mb-6 leading-relaxed flex-grow">{project.description}</p>
                 
-                {/* Stats badges */}
                 <div className="flex flex-wrap gap-2 mb-4">
                   {project.stats.map((stat, i) => (
                     <span
@@ -608,7 +630,6 @@ const Projects = memo(() => {
                   ))}
                 </div>
 
-                {/* Tech stack */}
                 <div className="flex flex-wrap gap-2 mb-6">
                   {project.tech.map((tech, i) => (
                     <span
@@ -620,8 +641,7 @@ const Projects = memo(() => {
                   ))}
                 </div>
 
-                {/* Links */}
-                <div className="flex gap-4">
+                <div className="flex gap-4 flex-wrap">
                   <motion.a
                     href={project.github}
                     target="_blank"
@@ -642,6 +662,18 @@ const Projects = memo(() => {
                       aria-label={`Read research paper for ${project.title}`}
                     >
                       <ExternalLink size={20} /> Research Paper
+                    </motion.a>
+                  )}
+                  {project.demo && (
+                    <motion.a
+                      href={project.demo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{ scale: 1.05 }}
+                      className="flex items-center gap-2 text-green-400 hover:text-green-300 transition-colors"
+                      aria-label={`Watch demo for ${project.title}`}
+                    >
+                      <PlayCircle size={20} /> Watch Demo
                     </motion.a>
                   )}
                 </div>
@@ -884,7 +916,6 @@ const Contact = memo(() => {
 
   const handleChange = (field) => (e) => {
     setFormData({ ...formData, [field]: e.target.value });
-    // Clear error for this field when user starts typing
     if (errors[field]) {
       setErrors({ ...errors, [field]: '' });
     }
@@ -1068,17 +1099,14 @@ LoadingScreen.displayName = 'LoadingScreen';
 
 // ==================== MAIN PORTFOLIO COMPONENT ====================
 const Portfolio = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate initial load
     const timer = setTimeout(() => setIsLoading(false), 1000);
     return () => clearTimeout(timer);
   }, []);
 
-  // Track active section based on scroll position
   useEffect(() => {
     const handleScroll = () => {
       const sections = NAV_ITEMS.map(item => item.toLowerCase());
